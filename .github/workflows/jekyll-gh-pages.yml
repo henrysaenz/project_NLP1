@@ -1,0 +1,33 @@
+name: deploy-jupyter-book
+
+on:
+  push:
+    branches:
+      - main  # o tu rama principal
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements5.txt
+
+      - name: Build the Jupyter Book
+        run: |
+          jupyter-book build .
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_build/html
+
